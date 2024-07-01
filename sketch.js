@@ -61,7 +61,8 @@ function draw() {
   // Livello 4
 
   deleteShader.setUniform("tex0", saturateLayer);
-  deleteShader.setUniform("whiteProbability", 0.3);
+  deleteShader.setUniform("whiteProbability", 0.1);
+  deleteShader.setUniform("amount", 40.0);
   deleteLayer.rect(0, 0, width, height);
   image(deleteLayer, 0, 0);
 

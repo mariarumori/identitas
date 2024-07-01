@@ -4,12 +4,18 @@ varying vec2 vTexCoord;
 
 uniform sampler2D tex0;
 uniform float whiteProbability;
+uniform float amount;
 
 void main() {
     vec2 uv = vTexCoord;
 
     // Flip the texture vertically
     uv = 1.0 - uv;
+
+    //
+    uv = uv * amount;
+    uv = floor(uv);
+    uv = uv / amount;
 
     // Sample the texture
     vec4 color = texture2D(tex0, uv);
