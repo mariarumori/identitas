@@ -15,11 +15,11 @@ let recolorLayer;
 
 function preload() {
   // load the shader
-  pixelShader = loadShader("base.vert", "pixelate.frag");
-  blurShader = loadShader("base.vert", "blur.frag");
-  saturateShader = loadShader("base.vert", "saturate.frag");
-  deleteShader = loadShader("base.vert", "delete.frag");
-  recolorShader = loadShader("base.vert", "recolor.frag");
+  pixelShader = loadShaderByName("pixelate");
+  blurShader = loadShaderByName("blur");
+  saturateShader = loadShaderByName("saturate");
+  deleteShader = loadShaderByName("delete");
+  recolorShader = loadShaderByName("recolor");
 }
 
 function setup() {
