@@ -23,25 +23,15 @@ function preload() {
 }
 
 function setup() {
-  // shaders require WEBGL mode to work
   createCanvas(windowWidth, windowHeight, WEBGL);
   startCamera(width, height);
   noStroke();
 
-  pixelLayer = createGraphics(width, height, WEBGL);
-  pixelLayer.shader(pixelShader);
-
-  blurLayer = createGraphics(width, height, WEBGL);
-  blurLayer.shader(blurShader);
-
-  saturateLayer = createGraphics(width, height, WEBGL);
-  saturateLayer.shader(saturateShader);
-
-  deleteLayer = createGraphics(width, height, WEBGL);
-  deleteLayer.shader(deleteShader);
-
-  recolorLayer = createGraphics(width, height, WEBGL);
-  recolorLayer.shader(recolorShader);
+  pixelLayer = createShaderLayer(pixelShader, width, height);
+  blurLayer = createShaderLayer(blurShader, width, height);
+  saturateLayer = createShaderLayer(saturateShader, width, height);
+  deleteLayer = createShaderLayer(deleteShader, width, height);
+  recolorLayer = createShaderLayer(recolorShader, width, height);
 }
 
 function draw() {
