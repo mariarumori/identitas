@@ -13,9 +13,6 @@ let deleteLayer;
 let recolorShader;
 let recolorLayer;
 
-// the camera variable
-let cam;
-
 function preload() {
   // load the shader
   pixelShader = loadShader("base.vert", "pixelate.frag");
@@ -28,14 +25,8 @@ function preload() {
 function setup() {
   // shaders require WEBGL mode to work
   createCanvas(windowWidth, windowHeight, WEBGL);
+  startCamera(width, height);
   noStroke();
-
-  // initialize the webcam at the window size
-  cam = createCapture(VIDEO);
-  cam.size(windowWidth, windowHeight);
-
-  // hide the html element that createCapture adds to the screen
-  cam.hide();
 
   pixelLayer = createGraphics(width, height, WEBGL);
   pixelLayer.shader(pixelShader);
@@ -58,7 +49,7 @@ function draw() {
 
   // Livello 1
 
-  pixelShader.setUniform("tex0", cam);
+  pixelShader.setUniform("tex0", getCamera());
   pixelShader.setUniform("amount", 40.0);
   pixelLayer.rect(0, 0, width, height);
   image(pixelLayer, 0, 0);
