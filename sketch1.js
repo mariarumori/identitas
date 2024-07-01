@@ -75,10 +75,10 @@ function draw() {
 
   if (capturedImage) {
     let layer_1 = pixelShader(capturedImage, slider_1.value());
-    let layer_2 = blurShader(layer_1, slider_2.value() * 10);
-    let layer_3 = saturateShader(layer_2, map(slider_3.value(), 0, 5, 25, 100));
+    let layer_2 = blurShader(layer_1, slider_2.value());
+    let layer_3 = saturateShader(layer_2, slider_3.value());
     let layer_4 = deleteShader(layer_3, slider_4.value());
-    let layer_5 = recolorShader(layer_4, slider_5.value() / (5 + 2));
+    let layer_5 = recolorShader(layer_4, slider_5.value());
 
     image(layer_5, 0, 0);
   }
