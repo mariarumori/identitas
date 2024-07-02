@@ -41,7 +41,7 @@ function setup() {
   createCanvas(windowWidth, windowHeight, WEBGL);
   startCamera(width, height);
   noStroke();
-  // noLoop();
+  hideCanvas();
 
   createP("QUANTO PENSI CHE IL MONDO ESTERNO INFLUISCA SULLA TUA IDENTITÀ?");
   slider_1 = createSlider(slider_min, slider_max, slider_min);
@@ -72,7 +72,6 @@ function setup() {
   createP("");
 
   createCaptureButton();
-  createRedrawButton();
 }
 
 function draw() {
@@ -131,18 +130,23 @@ function captureImage() {
   capturedImage.image(getCamera(), 0, 0);
   stopCamera();
   redraw();
+  showCanvas();
+  window.scrollTo({ top: 0 });
 }
 
 function createCaptureButton() {
-  let captureButton = createButton("SCATTA FOTO");
+  let captureButton = createButton("SMASCHERA");
   captureButton.mousePressed(captureImage);
-}
-
-function createRedrawButton() {
-  let redrawButton = createButton("RIDISEGNA");
-  redrawButton.mousePressed(redraw);
 }
 
 function mapSliderValue(slider, min, max) {
   return map(slider.value(), slider_min, slider_max, min, max);
+}
+
+function hideCanvas() {
+  document.getElementById("defaultCanvas0").classList.add("hide");
+}
+
+function showCanvas() {
+  document.getElementById("defaultCanvas0").classList.remove("hide");
 }

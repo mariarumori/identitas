@@ -6,3 +6,7 @@ body {
 canvas {
   display: block;
 }
+
+.hide {
+  display: none;
+}
