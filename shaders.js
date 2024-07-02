@@ -1,5 +1,5 @@
 function loadShaderByName(name) {
-  return loadShader("shaders/_base.vert", `shaders/${name}.frag`);
+  return loadShader("shaders/base.vert", `shaders/${name}.frag`);
 }
 
 function createShaderLayer(shader, w, h) {
