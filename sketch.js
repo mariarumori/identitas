@@ -1,12 +1,14 @@
-let capture;
-let captureButton;
 let capturedImage;
+
+//
 
 let slider_1;
 let slider_2;
 let slider_3;
 let slider_4;
 let slider_5;
+
+//
 
 let pixelShader;
 let pixelLayer;
@@ -32,37 +34,39 @@ function preload() {
   recolorShader = loadShaderByName("recolor");
 }
 
+let slider_max = 5;
+let slider_min = 0;
+
 function setup() {
   createCanvas(windowWidth, windowHeight, WEBGL);
   startCamera(width, height);
   noStroke();
-  startCapture();
-  noLoop();
+  // noLoop();
 
   createP("QUANTO PENSI CHE IL MONDO ESTERNO INFLUISCA SULLA TUA IDENTITÀ?");
-  slider_1 = createSlider(0, 5, 0);
+  slider_1 = createSlider(slider_min, slider_max, slider_min);
   pixelLayer = createShaderLayer(pixelShader, width, height);
 
   createP(
     "QUANTO PENSI CHE L’AMBIENTE FAMILIARE ABBIA INCISO NELLA TUA SFERA IDENTITARIA?"
   );
-  slider_2 = createSlider(0, 5, 0);
+  slider_2 = createSlider(slider_min, slider_max, slider_min);
   blurLayer = createShaderLayer(blurShader, width, height);
 
   createP(
     "QUANTO PENSI CHE L’AMBIENTE SCOLASTICO ABBIA INCISO NELLA TUA SFERA IDENTITARIA?"
   );
-  slider_3 = createSlider(0, 5, 0);
+  slider_3 = createSlider(slider_min, slider_max, slider_min);
   saturateLayer = createShaderLayer(saturateShader, width, height);
-  
+
   createP(
     "QUANTO PENSI CHE L’AMBIENTE LAVORATIVO ABBIA INCISO NELLA TUA SFERA IDENTITARIA?"
   );
-  slider_4 = createSlider(0, 5, 0);
+  slider_4 = createSlider(slider_min, slider_max, slider_min);
   deleteLayer = createShaderLayer(deleteShader, width, height);
 
   createP("QUANTO PENSI DI RECITARE UN RUOLO NELLA TUA VITA?");
-  slider_5 = createSlider(0, 5, 0);
+  slider_5 = createSlider(slider_min, slider_max, slider_min);
   recolorLayer = createShaderLayer(recolorShader, width, height);
 
   createP("");
@@ -75,79 +79,70 @@ function draw() {
   translate(-width / 2, -height / 2);
 
   if (capturedImage) {
-    let layer_1 = pixelShader(capturedImage, slider_1.value());
-    let layer_2 = blurShader(layer_1, slider_2.value());
-    let layer_3 = saturateShader(layer_2, slider_3.value());
-    let layer_4 = deleteShader(layer_3, slider_4.value());
-    let layer_5 = recolorShader(layer_4, slider_5.value());
+    // Livello 1
 
-    image(layer_5, 0, 0);
+    let value_1 = mapSliderValue(slider_1, 200, 50);
+    pixelShader.setUniform("tex0", getCamera());
+    pixelShader.setUniform("amount", value_1);
+    pixelLayer.rect(0, 0, width, height);
+    image(pixelLayer, 0, 0);
+
+    // // Livello 2
+
+    // let value_2 = mapSliderValue(slider_2, 1, 3);
+    // blurShader.setUniform("tex0", pixelLayer);
+    // blurShader.setUniform("texelSize", [value_2 / width, value_2 / height]);
+    // blurLayer.rect(0, 0, width, height);
+    // image(blurLayer, 0, 0);
+
+    // // Livello 3
+
+    // let value_3 = mapSliderValue(slider_3, 0, 4);
+    // saturateShader.setUniform("tex0", blurLayer);
+    // saturateShader.setUniform("saturation", value_3);
+    // saturateLayer.rect(0, 0, width, height);
+    // image(saturateLayer, 0, 0);
+
+    // // Livello 4
+
+    // let value_4 = mapSliderValue(slider_4, 0.1, 0.5);
+    // deleteShader.setUniform("tex0", saturateLayer);
+    // deleteShader.setUniform("whiteProbability", value_4);
+    // deleteShader.setUniform("amount", value_2);
+    // deleteLayer.rect(0, 0, width, height);
+    // image(deleteLayer, 0, 0);
+
+    // // Livello 5
+
+    // let value_5 = mapSliderValue(slider_5, 0, 10);
+    // recolorShader.setUniform("tex0", deleteLayer);
+    // recolorShader.setUniform("time", value_5);
+    // recolorLayer.rect(0, 0, width, height);
+    // image(recolorLayer, 0, 0);
   }
-
-  // Livello 1
-
-  pixelShader.setUniform("tex0", getCamera());
-  pixelShader.setUniform("amount", 40.0);
-  pixelLayer.rect(0, 0, width, height);
-  image(pixelLayer, 0, 0);
-
-  // Livello 2
-
-  blurShader.setUniform("tex0", pixelLayer);
-  blurShader.setUniform("texelSize", [1.0 / width, 1.0 / height]);
-  blurLayer.rect(0, 0, width, height);
-  image(blurLayer, 0, 0);
-
-  // Livello 3
-
-  saturateShader.setUniform("tex0", blurLayer);
-  saturateShader.setUniform("saturation", 5.0);
-  saturateLayer.rect(0, 0, width, height);
-  image(saturateLayer, 0, 0);
-
-  // Livello 4
-
-  deleteShader.setUniform("tex0", saturateLayer);
-  deleteShader.setUniform("whiteProbability", 0.1);
-  deleteShader.setUniform("amount", 40.0);
-  deleteLayer.rect(0, 0, width, height);
-  image(deleteLayer, 0, 0);
-
-  // Livello 5
-
-  recolorShader.setUniform("tex0", deleteLayer);
-  recolorShader.setUniform("time", frameCount * 0.01);
-  recolorLayer.rect(0, 0, width, height);
-  image(recolorLayer, 0, 0);
 }
 
 function windowResized() {
   resizeCanvas(windowWidth, windowHeight);
 }
-function startCapture() {
-  capture = createCapture(VIDEO);
-  capture.size(width, height);
-  capture.hide();
-}
-
-function stopCapture() {
-  capture.stop();
-  capture.remove();
-}
 
 function captureImage() {
   capturedImage = createGraphics(width, height);
-  capturedImage.image(capture, 0, 0);
-  stopCapture();
+  capturedImage.image(getCamera(), 0, 0);
+  stopCamera();
   redraw();
 }
 
 function createCaptureButton() {
-  captureButton = createButton("SCATTA FOTO");
+  let captureButton = createButton("SCATTA FOTO");
   captureButton.mousePressed(captureImage);
 }
 
 function createRedrawButton() {
   let redrawButton = createButton("RIDISEGNA");
   redrawButton.mousePressed(redraw);
+}
+
+function mapSliderValue(slider, min, max) {
+  return map(slider.value(), slider_min, slider_max, min, max);
 }

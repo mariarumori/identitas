@@ -9,3 +9,8 @@ function startCamera(w, h) {
 function getCamera() {
   return cam;
 }
+
+function stopCamera() {
+  cam.stop();
+  cam.remove();
+}
