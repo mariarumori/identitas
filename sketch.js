@@ -1,77 +1,16 @@
-let capturedImage;
-
 //
-
-let slider_1;
-let slider_2;
-let slider_3;
-let slider_4;
-let slider_5;
-
-//
-
-let pixelShader;
-let pixelLayer;
-
-let blurShader;
-let blurLayer;
-
-let saturateShader;
-let saturateLayer;
-
-let deleteShader;
-let deleteLayer;
-
-let recolorShader;
-let recolorLayer;
 
 function preload() {
-  // load the shader
-  pixelShader = loadShaderByName("pixelate");
-  blurShader = loadShaderByName("blur");
-  saturateShader = loadShaderByName("saturate");
-  deleteShader = loadShaderByName("delete");
-  recolorShader = loadShaderByName("recolor");
+  loadShaders();
 }
-
-let slider_max = 5;
-let slider_min = 0;
 
 function setup() {
   createCanvas(windowWidth, windowHeight, WEBGL);
   startCamera(width, height);
   noStroke();
   hideCanvas();
-
-  createP("QUANTO PENSI CHE IL MONDO ESTERNO INFLUISCA SULLA TUA IDENTITÀ?");
-  slider_1 = createSlider(slider_min, slider_max, slider_min);
-  pixelLayer = createShaderLayer(pixelShader, width, height);
-
-  createP(
-    "QUANTO PENSI CHE L’AMBIENTE FAMILIARE ABBIA INCISO NELLA TUA SFERA IDENTITARIA?"
-  );
-  slider_2 = createSlider(slider_min, slider_max, slider_min);
-  blurLayer = createShaderLayer(blurShader, width, height);
-
-  createP(
-    "QUANTO PENSI CHE L’AMBIENTE SCOLASTICO ABBIA INCISO NELLA TUA SFERA IDENTITARIA?"
-  );
-  slider_3 = createSlider(slider_min, slider_max, slider_min);
-  saturateLayer = createShaderLayer(saturateShader, width, height);
-
-  createP(
-    "QUANTO PENSI CHE L’AMBIENTE LAVORATIVO ABBIA INCISO NELLA TUA SFERA IDENTITARIA?"
-  );
-  slider_4 = createSlider(slider_min, slider_max, slider_min);
-  deleteLayer = createShaderLayer(deleteShader, width, height);
-
-  createP("QUANTO PENSI DI RECITARE UN RUOLO NELLA TUA VITA?");
-  slider_5 = createSlider(slider_min, slider_max, slider_min);
-  recolorLayer = createShaderLayer(recolorShader, width, height);
-
-  createP("");
-
-  createCaptureButton();
+  createLayers();
+  createUI();
 }
 
 function draw() {
@@ -125,28 +64,12 @@ function windowResized() {
   resizeCanvas(windowWidth, windowHeight);
 }
 
-function captureImage() {
-  capturedImage = createGraphics(width, height);
-  capturedImage.image(getCamera(), 0, 0);
-  stopCamera();
-  redraw();
-  showCanvas();
-  window.scrollTo({ top: 0 });
-}
-
-function createCaptureButton() {
-  let captureButton = createButton("SMASCHERA");
-  captureButton.mousePressed(captureImage);
-}
-
-function mapSliderValue(slider, min, max) {
-  return map(slider.value(), slider_min, slider_max, min, max);
-}
-
-function hideCanvas() {
-  document.getElementById("defaultCanvas0").classList.add("hide");
-}
-
-function showCanvas() {
-  document.getElementById("defaultCanvas0").classList.remove("hide");
+function keyPressed() {
+  if (key == "p") {
+    print();
+  } else if (key == "r") {
+    showUI();
+    startCamera();
+    hideCanvas();
+  }
 }

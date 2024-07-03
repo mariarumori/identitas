@@ -1,4 +1,5 @@
 let cam;
+let capturedImage;
 
 function startCamera(w, h) {
   cam = createCapture(VIDEO);
@@ -13,4 +14,9 @@ function getCamera() {
 function stopCamera() {
   cam.stop();
   cam.remove();
+}
+
+function captureImage() {
+  capturedImage = createGraphics(width, height);
+  capturedImage.image(getCamera(), 0, 0);
 }
