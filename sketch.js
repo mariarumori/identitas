@@ -11,6 +11,7 @@ function setup() {
   hideCanvas();
   createLayers();
   createUI();
+  noLoop();
 }
 
 function draw() {
